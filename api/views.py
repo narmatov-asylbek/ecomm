@@ -6,7 +6,13 @@ from rest_framework.reverse import reverse
 from orders.models import Order, OrderItem
 from coupons.models import Coupon
 from shop.models import Category, Product
-from .serializers import OrderSerializer, OrderItemSerializer, CouponSerializer, CategorySerializer, ProductSerializer
+from .serializers import (
+    OrderSerializer,
+    OrderItemSerializer,
+    CouponSerializer,
+    CategorySerializer,
+    ProductSerializer
+)
 
 
 @api_view(['GET'])
@@ -20,6 +26,7 @@ def api_root(request):
     })
 
 
+# Orders
 class OrderList(generics.ListCreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
@@ -30,15 +37,18 @@ class OrderDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = OrderSerializer
 
 
+# Order Items
 class OrderItemList(generics.ListCreateAPIView):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
+
 
 class OrderItemDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
 
 
+# Coupons
 class CouponList(generics.ListCreateAPIView):
     queryset = Coupon.objects.all()
     serializer_class = CouponSerializer
@@ -49,6 +59,7 @@ class CouponDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CouponSerializer
 
 
+# Products
 class ProductList(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -59,6 +70,7 @@ class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
 
 
+# Category
 class CategoryList(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
