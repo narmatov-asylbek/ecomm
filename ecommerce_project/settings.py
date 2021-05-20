@@ -42,10 +42,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'account.apps.AccountConfig',
+    # 3-rd party apps
+    'rest_framework',
+    # Local apps
     'shop.apps.ShopConfig',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
-    'coupons.apps.CouponsConfig'
+    'coupons.apps.CouponsConfig',
+    'api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
