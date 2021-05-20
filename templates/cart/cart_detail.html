@@ -1,0 +1,82 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}
+    Ваша корзина
+{% endblock %}
+
+{% block content %}
+    <section class="cart-wrapper">
+        <h1>Ваша корзина</h1>
+        <table class="cart">
+            <thead>
+            <tr>
+                <th>Изображение</th>
+                <th>Товар</th>
+                <th>Количество</th>
+                <th>Удалить</th>
+                <th>Стоимость товара</th>
+                <th>Цена</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for item in cart %}
+                    {% with product=item.product %}
+                        <tr>
+                            <td>
+                                <a href="{{ product.get_absolute_url }}">
+                                    <img src="{{ product.image.url }}" alt="">
+                                </a>
+                            </td>
+                            <td>{{ product.name }}</td>
+                            <td>
+                                <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                                    {% csrf_token %}
+                                    {{ item.update_quantity_form.quantity }}
+                                    {{ item.update_quantity_form.override }}
+                                    <input type="submit" value="Обновить">
+                                </form>
+                            </td>
+                            <td>
+                                <form action="{% url 'cart:cart_remove' product.id%}" method="post">
+                                    {% csrf_token %}
+                                    <input type="submit" value="Удалить">
+                                </form>
+                            </td>
+                            <td class="num">${{ item.price }}</td>
+                            <td class="num">${{ item.total_price }}</td>
+                        </tr>
+                    {% endwith %}
+                {% endfor %}
+                {% if cart.coupon %}
+                    <tr class="subtotal">
+                        <td></td>
+                        <td colspan="4"></td>
+                        <td class="num">${{ cart.get_total_price }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Купон "{{ cart.coupon.code }} - {{ cart.coupon.discount }}"
+                        </td>
+                        <td colspan="4"></td>
+                        <td class="neg">-${{ cart.get_discount }}</td>
+                    </tr>
+                {% endif %} 
+                <tr class="total">
+                    <td>Итого</td>
+                    <td colspan="4"></td>
+                    <td class="num">${{ cart.get_total_price_after_discount }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Использовать Купон</p>
+        <form action="{% url 'coupons:apply_coupon' %}" method="post">
+         {% csrf_token %}
+            {{ coupon_form.as_p }}
+            <input type="submit" value="Использовать">
+        </form>
+        <p class="text-right">
+            <a href="{% url 'shop:product_list' %}">Продолжить покупки</a>
+            <a href="{% url 'orders:create_order' %}">Перейти к оформлению</a>
+        </p>
+    </section>
+{% endblock %}
